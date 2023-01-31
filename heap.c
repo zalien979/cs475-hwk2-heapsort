@@ -17,12 +17,13 @@
  */
 void heapSort(Employee *A, int n)
 {
-	// TODO - BuildHeap on the heap
+	buildHeap(A,n);
+	while(n>0){
+		n--;
+		swap(&A[n],&A[0]);
+		buildHeap(A,n);
 
-	// TODO - while n > 0:
-	// TODO - swap A[n-1] with A[0], since A[0] is the smallest number.
-	// TODO - A[n-1] now sorted in place, so decrement n
-	// TODO - Heapify the elements from A[0] up to A[n-1] (which leaves the newly sorted element alone)
+	}
 }
 
 /**
@@ -35,9 +36,12 @@ void heapSort(Employee *A, int n)
  */
 void buildHeap(Employee *A, int n)
 {
-	// TODO - heapify() every element from A[n/2] down-to A[0]
+	
+	for(int i=(n/2)-1; i>=0; i--){
+		heapify(A,i,n);
+	}
 }
-
+ 
 /**
  * We want to start with A[i] and percolate it downward
  * if it is greater than either left or right child.
@@ -48,15 +52,30 @@ void buildHeap(Employee *A, int n)
  */
 void heapify(Employee *A, int i, int n)
 {
-	// TODO - get index of left child of element i
-	// TODO - get index of right child of element i
+	
+	int left;
+	left=(2*i)+1;
+	int right;
+	right=(2*i)+2;
+	int smaller;
+	smaller=A[i].salary;
+	int side=0;
+	if(left<n && smaller>A[left].salary){
+		smaller=A[left].salary;
+		side =1;
+	}
+	if(right<n && smaller>A[right].salary){
+		side =2;
+	}
+	if(side ==1){
+		swap(&A[i],&A[left]);
+		heapify(A,left,n);
+	}
+	else if(side==2){
+		swap(&A[i],&A[right]);
+		heapify(A,right,n);
+	}
 
-	// TODO - determine which child has a smaller salary. We'll call the index of this
-	//		element: "smaller"
-
-	// TODO - recursively check if the salary at A[i] > the salary at A[smaller]. If it is, swap the two.
-	//			Then recursively heapify A[smaller].
-	// TODO - Continue recursion as long as i is within range AND either right_child and left_child are still within range.
 }
 
 /**
@@ -66,7 +85,12 @@ void heapify(Employee *A, int i, int n)
  */
 void swap(Employee *e1, Employee *e2)
 {
-	// TODO
+	
+	Employee temp;
+	temp=*e1;
+	*e1=*e2;
+	*e2=temp;
+
 }
 
 /**
@@ -76,5 +100,7 @@ void swap(Employee *e1, Employee *e2)
  */
 void printList(Employee *A, int n)
 {
-	// TODO
+	for(int i=0; i<n; i++){
+		printf("%d: %s %d\n", i,A[i].name, A[i].salary);
+	}
 }
